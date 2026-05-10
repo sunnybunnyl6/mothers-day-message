@@ -8,12 +8,12 @@ canvas.height = window.innerHeight;
 
 // 1. List your 6 filenames (must match exactly on GitHub)
 const photoFiles = [
-    'mom.1.jpg', 
-    'mom.2.jpg', 
-    'mom.3.jpg', 
-    'mom.4.jpg', 
-    'mom.5.jpg', 
-    'mom.6.jpg'
+    'Mom.1.jpg', 
+    'Mom.2.jpg', 
+    'Mom.3.jpg', 
+    'Mom.4.jpg', 
+    'Mom.5.jpg', 
+    'Mom.6.jpg'
 ];
 
 function spawnPhoto() {

@@ -6,14 +6,14 @@ const bgMusic = document.getElementById('bgMusic');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-// FILENAMES: Using Capital "M" to match your files: Mom.1.jpg, etc.
+// Add './' to the start of each filename
 const photoFiles = [
-    'Mom.1.jpg', 
-    'Mom.2.jpg', 
-    'Mom.3.jpg', 
-    'Mom.4.jpg', 
-    'Mom.5.jpg', 
-    'Mom.6.jpg'
+    './Mom.1.jpg', 
+    './Mom.2.jpg', 
+    './Mom.3.jpg', 
+    './Mom.4.jpg', 
+    './Mom.5.jpg', 
+    './Mom.6.jpg'
 ];
 
 function spawnPhoto() {

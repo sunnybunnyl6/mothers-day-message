@@ -6,61 +6,114 @@
     <title>Happy Mother's Day!</title>
     <style>
         body { margin: 0; background: #000; overflow: hidden; font-family: 'Arial', sans-serif; }
-        canvas { display: block; }
+        canvas { display: block; position: absolute; top: 0; left: 0; z-index: 5; pointer-events: none; }
+        
+        /* Photo Styling */
+        .mom-photo {
+            position: absolute;
+            width: 250px; /* Size of the photos */
+            height: auto;
+            border: 6px solid white;
+            box-shadow: 0 0 25px rgba(255, 105, 180, 0.5);
+            z-index: 1; /* Sits behind fireworks */
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+            pointer-events: none;
+            border-radius: 4px;
+        }
+
         #overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.9); display: flex; justify-content: center;
             align-items: center; z-index: 100; color: white; flex-direction: column;
         }
+        
         button {
             padding: 20px 40px; font-size: 1.5rem; cursor: pointer;
             background: #ff69b4; border: none; color: white; border-radius: 50px;
-            box-shadow: 0 0 20px #ff69b4; transition: 0.3s; font-weight: bold;
+            box-shadow: 0 0 20px #ff69b4; font-weight: bold; transition: 0.3s;
         }
         button:hover { transform: scale(1.1); background: #ff1493; }
+
         #message {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            color: white; font-size: 4em; text-align: center;
+            position: absolute; top: 10%; width: 100%; text-align: center;
+            color: white; font-size: 3.5em; font-weight: bold;
             text-shadow: 0 0 10px #ff69b4, 0 0 30px #ff69b4;
-            pointer-events: none; visibility: hidden; z-index: 10;
+            z-index: 10; visibility: hidden;
         }
     </style>
 </head>
 <body>
 
-    <!-- Start Overlay (Required for Audio) -->
+    <!-- Click to Start Overlay -->
     <div id="overlay">
-        <h1 style="margin-bottom: 20px;">A Special Surprise for Mom...</h1>
-        <button onclick="startShow()">Open Your Gift 🎁</button>
+        <h1 style="margin-bottom: 20px;">A Gift for the Best Mom ❤️</h1>
+        <button onclick="startShow()">Open Your Surprise 🎁</button>
     </div>
 
-    <!-- Hidden Audio Elements -->
-    <audio id="bgMusic" src="Music.mp3" loop></audio>
-    <!-- Optional: Add a simple pop sound for every firework -->
-    <audio id="fireworkSound" src="https://google.com"></audio>
+    <!-- Music File (Ensure your file is named music.mp3 on GitHub) -->
+    <audio id="bgMusic" src="music.mp3" loop></audio>
 
-    <div id="message">Happy Mother's Day! <br> ❤️❤️❤️</div>
+    <div id="message">Happy Mother's Day!</div>
     <canvas id="fireworksCanvas"></canvas>
 
 <script>
     const canvas = document.getElementById('fireworksCanvas');
     const ctx = canvas.getContext('2d');
     const msg = document.getElementById('message');
-    const overlay = document.getElementById('overlay');
     const bgMusic = document.getElementById('bgMusic');
-    const popSound = document.getElementById('fireworkSound');
     
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
+    // List of your 6 photo names exactly as they are on GitHub
+    const photoFiles = [
+        'mom.1.jpg', 
+        'mom.2.jpg', 
+        'mom.3.jpg', 
+        'mom.4.jpg', 
+        'mom.5.jpg', 
+        'mom.6.jpg'
+    ];
+
+    function spawnPhoto() {
+        const img = document.createElement('img');
+        const randomFile = photoFiles[Math.floor(Math.random() * photoFiles.length)];
+        
+        img.src = randomFile;
+        img.className = 'mom-photo';
+        
+        // Random placement
+        const x = Math.random() * (window.innerWidth - 250);
+        const y = 150 + Math.random() * (window.innerHeight - 400);
+        img.style.left = `${x}px`;
+        img.style.top = `${y}px`;
+        
+        // Random slight tilt
+        img.style.transform = `rotate(${(Math.random() - 0.5) * 20}deg)`;
+
+        document.body.appendChild(img);
+
+        // Fade in, stay, then fade out
+        setTimeout(() => { img.style.opacity = '1'; }, 100);    // Show
+        setTimeout(() => { img.style.opacity = '0'; }, 4000);   // Start fading out at 4 seconds
+        setTimeout(() => { img.remove(); }, 6500);              // Remove from site memory
+    }
+
     function startShow() {
-        overlay.style.display = 'none';
+        document.getElementById('overlay').style.display = 'none';
         msg.style.visibility = 'visible';
-        bgMusic.play(); // Starts your music.mp3
-        setInterval(createFirework, 600);
+        bgMusic.play();
+        
+        // Create a new photo every 3 seconds
+        setInterval(spawnPhoto, 3000); 
+        // Create a new firework every 0.7 seconds
+        setInterval(createFirework, 700);
+        
         animate();
     }
 
+    // --- Firework Animation Logic ---
     class Particle {
         constructor(x, y, color) {
             this.x = x; this.y = y; this.color = color;
@@ -69,23 +122,20 @@
         }
         draw() {
             ctx.globalAlpha = this.alpha;
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
-            ctx.fillStyle = this.color;
-            ctx.fill();
+            ctx.beginPath(); ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+            ctx.fillStyle = this.color; ctx.fill();
         }
         update() {
-            this.velocity.x *= this.friction;
-            this.velocity.y *= this.friction;
+            this.velocity.x *= this.friction; this.velocity.y *= this.friction;
             this.x += this.velocity.x; this.y += this.velocity.y;
-            this.alpha -= 0.012;
+            this.alpha -= 0.015;
         }
     }
 
     let particles = [];
     function animate() {
         requestAnimationFrame(animate);
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.15)'; // Trail effect
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         particles.forEach((p, i) => {
             if (p.alpha > 0) { p.update(); p.draw(); } 
@@ -97,12 +147,6 @@
         const x = Math.random() * canvas.width;
         const y = Math.random() * (canvas.height / 2);
         const color = `hsl(${Math.random() * 360}, 100%, 70%)`;
-        
-        // Play small firework pop
-        const s = popSound.cloneNode();
-        s.volume = 0.1;
-        s.play();
-
         for (let i = 0; i < 80; i++) {
             particles.push(new Particle(x, y, color));
         }

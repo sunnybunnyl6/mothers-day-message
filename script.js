@@ -6,7 +6,7 @@ const bgMusic = document.getElementById('bgMusic');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-// FILENAMES: Using Capital "M" to match your files: Mom.1.jpg, etc.
+// FILENAMES: Using Capital "M" to match your files exactly
 const photoFiles = [
     'Mom.1.jpg', 
     'Mom.2.jpg', 
@@ -22,21 +22,20 @@ function spawnPhoto() {
     img.src = randomFile;
     img.className = 'mom-photo';
     
-    // Logic to place photos around the centered title
+    // Random placement in the four corners/sides to avoid the middle title
     let x, y;
     const side = Math.random();
-    
-    if (side < 0.25) { // Left side
+    if (side < 0.25) { // Left
         x = Math.random() * (window.innerWidth * 0.2);
-        y = Math.random() * (window.innerHeight - 250);
-    } else if (side < 0.5) { // Right side
+        y = Math.random() * (window.innerHeight - 300);
+    } else if (side < 0.5) { // Right
         x = (window.innerWidth * 0.75) + (Math.random() * (window.innerWidth * 0.15));
-        y = Math.random() * (window.innerHeight - 250);
-    } else if (side < 0.75) { // Top area
-        x = Math.random() * (window.innerWidth - 250);
+        y = Math.random() * (window.innerHeight - 300);
+    } else if (side < 0.75) { // Top
+        x = Math.random() * (window.innerWidth - 300);
         y = Math.random() * (window.innerHeight * 0.2);
-    } else { // Bottom area
-        x = Math.random() * (window.innerWidth - 250);
+    } else { // Bottom
+        x = Math.random() * (window.innerWidth - 300);
         y = (window.innerHeight * 0.75) + (Math.random() * (window.innerHeight * 0.15));
     }
 
@@ -46,22 +45,25 @@ function spawnPhoto() {
 
     document.body.appendChild(img);
 
+    // Fade animation sequence
     setTimeout(() => { img.style.opacity = '1'; }, 100);
-    setTimeout(() => { img.style.opacity = '0'; }, 4000); 
-    setTimeout(() => { img.remove(); }, 6500);
+    setTimeout(() => { img.style.opacity = '0'; }, 4500); 
+    setTimeout(() => { img.remove(); }, 7000);
 }
 
 function startShow() {
     document.getElementById('overlay').style.display = 'none';
     msg.style.visibility = 'visible';
-    bgMusic.play();
     
-    setInterval(spawnPhoto, 3000); 
-    setInterval(createFirework, 700);
+    // Play Music
+    bgMusic.play().catch(e => console.error("Music error. Check if 'Music.mp3' is on GitHub.", e));
+    
+    setInterval(spawnPhoto, 3000); // New photo every 3 seconds
+    setInterval(createFirework, 700); // New firework every 0.7 seconds
     animate();
 }
 
-// Firework Particle Logic
+// --- Fireworks Engine ---
 class Particle {
     constructor(x, y, color) {
         this.x = x; this.y = y; this.color = color;
@@ -95,7 +97,7 @@ function createFirework() {
     const x = Math.random() * canvas.width;
     const y = Math.random() * (canvas.height / 2);
     const color = `hsl(${Math.random() * 360}, 100%, 70%)`;
-    for (let i = 0; i < 80; i++) {
+    for (let i = 0; i < 70; i++) {
         particles.push(new Particle(x, y, color));
     }
 }

@@ -8,7 +8,7 @@
         body { margin: 0; background: #000; overflow: hidden; font-family: 'Arial', sans-serif; }
         canvas { display: block; position: absolute; top: 0; left: 0; z-index: 5; pointer-events: none; }
         
-        /* Centered Title Styling */
+        /* Perfectly Centered Title */
         #message {
             position: absolute;
             top: 50%;
@@ -17,7 +17,7 @@
             width: 100%;
             text-align: center;
             color: white;
-            font-size: 4em;
+            font-size: 4.5em;
             font-weight: bold;
             text-shadow: 0 0 10px #ff69b4, 0 0 30px #ff69b4, 0 0 50px #ff1493;
             z-index: 10;
@@ -25,10 +25,10 @@
             pointer-events: none;
         }
 
-        /* Photo Styling around the middle */
+        /* Photos appear around the center */
         .mom-photo {
             position: absolute;
-            width: 240px;
+            width: 250px;
             height: auto;
             border: 6px solid white;
             box-shadow: 0 0 25px rgba(255, 105, 180, 0.5);
@@ -55,17 +55,19 @@
 </head>
 <body>
 
+    <!-- Click to Start (Required for Music) -->
     <div id="overlay">
-        <h1 style="margin-bottom: 20px;">For the World's Best Mom ❤️</h1>
+        <h1 style="margin-bottom: 20px;">A Surprise for the Best Mom ❤️</h1>
         <button onclick="startShow()">Open Your Gift 🎁</button>
     </div>
 
-    <audio id="bgMusic" src="music.mp3" loop></audio>
+    <!-- Music File: Capital M -->
+    <audio id="bgMusic" src="Music.mp3" loop></audio>
 
     <div id="message">Happy Mother's Day!</div>
     <canvas id="fireworksCanvas"></canvas>
 
-    <!-- This links your index.html to your script.js file -->
+    <!-- Links to your script.js file -->
     <script src="script.js"></script>
 </body>
 </html>

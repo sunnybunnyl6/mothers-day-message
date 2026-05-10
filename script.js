@@ -19,23 +19,24 @@ const photoFiles = [
 function spawnPhoto() {
     const img = document.createElement('img');
     const randomFile = photoFiles[Math.floor(Math.random() * photoFiles.length)];
-    img.src = randomFile;
+    
+    // Adding './' helps GitHub find the file in the root folder
+    img.src = './' + randomFile; 
     img.className = 'mom-photo';
     
-    // Logic to place photos around the centered title
+    // Random placement logic
     let x, y;
     const side = Math.random();
-    
-    if (side < 0.25) { // Left side
+    if (side < 0.25) { 
         x = Math.random() * (window.innerWidth * 0.2);
         y = Math.random() * (window.innerHeight - 300);
-    } else if (side < 0.5) { // Right side
+    } else if (side < 0.5) { 
         x = (window.innerWidth * 0.75) + (Math.random() * (window.innerWidth * 0.15));
         y = Math.random() * (window.innerHeight - 300);
-    } else if (side < 0.75) { // Top area
+    } else if (side < 0.75) { 
         x = Math.random() * (window.innerWidth - 300);
         y = Math.random() * (window.innerHeight * 0.2);
-    } else { // Bottom area
+    } else { 
         x = Math.random() * (window.innerWidth - 300);
         y = (window.innerHeight * 0.75) + (Math.random() * (window.innerHeight * 0.15));
     }

@@ -13,7 +13,7 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%); /* Keeps it perfectly centered */
+            transform: translate(-50%, -50%);
             width: 100%;
             text-align: center;
             color: white;
@@ -25,14 +25,14 @@
             pointer-events: none;
         }
 
-        /* Photo Styling */
+        /* Photo Styling around the middle */
         .mom-photo {
             position: absolute;
-            width: 220px;
+            width: 240px;
             height: auto;
             border: 6px solid white;
             box-shadow: 0 0 25px rgba(255, 105, 180, 0.5);
-            z-index: 1; /* Sits behind fireworks and message */
+            z-index: 1; 
             opacity: 0;
             transition: opacity 2s ease-in-out;
             pointer-events: none;
@@ -41,7 +41,7 @@
 
         #overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); display: flex; justify-content: center;
+            background: rgba(0,0,0,0.95); display: flex; justify-content: center;
             align-items: center; z-index: 100; color: white; flex-direction: column;
         }
         
@@ -56,7 +56,7 @@
 <body>
 
     <div id="overlay">
-        <h1 style="margin-bottom: 20px;">A Special Surprise ❤️</h1>
+        <h1 style="margin-bottom: 20px;">For the World's Best Mom ❤️</h1>
         <button onclick="startShow()">Open Your Gift 🎁</button>
     </div>
 
@@ -65,108 +65,9 @@
     <div id="message">Happy Mother's Day!</div>
     <canvas id="fireworksCanvas"></canvas>
 
-<script>
-    const canvas = document.getElementById('fireworksCanvas');
-    const ctx = canvas.getContext('2d');
-    const msg = document.getElementById('message');
-    const bgMusic = document.getElementById('bgMusic');
-    
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    const photoFiles = ['Mom.1.jpg', 'Mom.2.jpg', 'Mom.3.jpg', 'Mom.4.jpg', 'Mom.5.jpg', 'Mom.6.jpg'];
-
-    function spawnPhoto() {
-        const img = document.createElement('img');
-        img.src = photoFiles[Math.floor(Math.random() * photoFiles.length)];
-        img.className = 'mom-photo';
-        
-        // Logical placement: Avoiding the center title area
-        let x, y;
-        const side = Math.random();
-        
-        if (side < 0.25) { // Left side
-            x = Math.random() * (window.innerWidth * 0.3);
-            y = Math.random() * (window.innerHeight - 250);
-        } else if (side < 0.5) { // Right side
-            x = (window.innerWidth * 0.7) + (Math.random() * (window.innerWidth * 0.2));
-            y = Math.random() * (window.innerHeight - 250);
-        } else if (side < 0.75) { // Top area
-            x = Math.random() * (window.innerWidth - 250);
-            y = Math.random() * (window.innerHeight * 0.3);
-        } else { // Bottom area
-            x = Math.random() * (window.innerWidth - 250);
-            y = (window.innerHeight * 0.7) + (Math.random() * (window.innerHeight * 0.2));
-        }
-
-        img.style.left = `${x}px`;
-        img.style.top = `${y}px`;
-        img.style.transform = `rotate(${(Math.random() - 0.5) * 20}deg)`;
-
-        document.body.appendChild(img);
-
-        setTimeout(() => { img.style.opacity = '1'; }, 100);
-        setTimeout(() => { img.style.opacity = '0'; }, 4000); 
-        setTimeout(() => { img.remove(); }, 6500);
-    }
-
-    function startShow() {
-        document.getElementById('overlay').style.display = 'none';
-        msg.style.visibility = 'visible';
-        bgMusic.play();
-        
-        setInterval(spawnPhoto, 2500); // New photo every 2.5 seconds
-        setInterval(createFirework, 700);
-        animate();
-    }
-
-    // Firework Logic
-    class Particle {
-        constructor(x, y, color) {
-            this.x = x; this.y = y; this.color = color;
-            this.velocity = { x: (Math.random() - 0.5) * 10, y: (Math.random() - 0.5) * 10 };
-            this.alpha = 1; this.friction = 0.95;
-        }
-        draw() {
-            ctx.globalAlpha = this.alpha;
-            ctx.beginPath(); ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
-            ctx.fillStyle = this.color; ctx.fill();
-        }
-        update() {
-            this.velocity.x *= this.friction; this.velocity.y *= this.friction;
-            this.x += this.velocity.x; this.y += this.velocity.y;
-            this.alpha -= 0.015;
-        }
-    }
-
-    let particles = [];
-    function animate() {
-        requestAnimationFrame(animate);
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        particles.forEach((p, i) => {
-            if (p.alpha > 0) { p.update(); p.draw(); } 
-            else { particles.splice(i, 1); }
-        });
-    }
-
-    function createFirework() {
-        const x = Math.random() * canvas.width;
-        const y = Math.random() * (canvas.height / 2);
-        const color = `hsl(${Math.random() * 360}, 100%, 70%)`;
-        for (let i = 0; i < 80; i++) {
-            particles.push(new Particle(x, y, color));
-        }
-    }
-
-    window.addEventListener('resize', () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    });
-</script>
+    <!-- This links your index.html to your script.js file -->
+    <script src="script.js"></script>
 </body>
 </html>
 
-    <script src="script.js"></script>
-</body>
 

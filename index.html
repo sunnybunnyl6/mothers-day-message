@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Mother's Day!</title>
+    <style>
+        body { margin: 0; background: #000; overflow: hidden; font-family: 'Arial', sans-serif; }
+        canvas { display: block; }
+        #overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); display: flex; justify-content: center;
+            align-items: center; z-index: 100; color: white; flex-direction: column;
+        }
+        button {
+            padding: 20px 40px; font-size: 1.5rem; cursor: pointer;
+            background: #ff69b4; border: none; color: white; border-radius: 50px;
+            box-shadow: 0 0 20px #ff69b4; transition: 0.3s; font-weight: bold;
+        }
+        button:hover { transform: scale(1.1); background: #ff1493; }
+        #message {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            color: white; font-size: 4em; text-align: center;
+            text-shadow: 0 0 10px #ff69b4, 0 0 30px #ff69b4;
+            pointer-events: none; visibility: hidden; z-index: 10;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Start Overlay (Required for Audio) -->
+    <div id="overlay">
+        <h1 style="margin-bottom: 20px;">A Special Surprise for Mom...</h1>
+        <button onclick="startShow()">Open Your Gift 🎁</button>
+    </div>
+
+    <!-- Hidden Audio Elements -->
+    <audio id="bgMusic" src="music.mp3" loop></audio>
+    <!-- Optional: Add a simple pop sound for every firework -->
+    <audio id="fireworkSound" src="https://google.com"></audio>
+
+    <div id="message">Happy Mother's Day! <br> ❤️❤️❤️</div>
+    <canvas id="fireworksCanvas"></canvas>
+
+<script>
+    const canvas = document.getElementById('fireworksCanvas');
+    const ctx = canvas.getContext('2d');
+    const msg = document.getElementById('message');
+    const overlay = document.getElementById('overlay');
+    const bgMusic = document.getElementById('bgMusic');
+    const popSound = document.getElementById('fireworkSound');
+    
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    function startShow() {
+        overlay.style.display = 'none';
+        msg.style.visibility = 'visible';
+        bgMusic.play(); // Starts your music.mp3
+        setInterval(createFirework, 600);
+        animate();
+    }
+
+    class Particle {
+        constructor(x, y, color) {
+            this.x = x; this.y = y; this.color = color;
+            this.velocity = { x: (Math.random() - 0.5) * 10, y: (Math.random() - 0.5) * 10 };
+            this.alpha = 1; this.friction = 0.95;
+        }
+        draw() {
+            ctx.globalAlpha = this.alpha;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+            ctx.fillStyle = this.color;
+            ctx.fill();
+        }
+        update() {
+            this.velocity.x *= this.friction;
+            this.velocity.y *= this.friction;
+            this.x += this.velocity.x; this.y += this.velocity.y;
+            this.alpha -= 0.012;
+        }
+    }
+
+    let particles = [];
+    function animate() {
+        requestAnimationFrame(animate);
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        particles.forEach((p, i) => {
+            if (p.alpha > 0) { p.update(); p.draw(); } 
+            else { particles.splice(i, 1); }
+        });
+    }
+
+    function createFirework() {
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * (canvas.height / 2);
+        const color = `hsl(${Math.random() * 360}, 100%, 70%)`;
+        
+        // Play small firework pop
+        const s = popSound.cloneNode();
+        s.volume = 0.1;
+        s.play();
+
+        for (let i = 0; i < 80; i++) {
+            particles.push(new Particle(x, y, color));
+        }
+    }
+
+    window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    });
+</script>
+</body>
+</html>

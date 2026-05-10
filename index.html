@@ -8,14 +8,31 @@
         body { margin: 0; background: #000; overflow: hidden; font-family: 'Arial', sans-serif; }
         canvas { display: block; position: absolute; top: 0; left: 0; z-index: 5; pointer-events: none; }
         
+        /* Centered Title Styling */
+        #message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Keeps it perfectly centered */
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-size: 4em;
+            font-weight: bold;
+            text-shadow: 0 0 10px #ff69b4, 0 0 30px #ff69b4, 0 0 50px #ff1493;
+            z-index: 10;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
         /* Photo Styling */
         .mom-photo {
             position: absolute;
-            width: 250px; /* Size of the photos */
+            width: 220px;
             height: auto;
             border: 6px solid white;
             box-shadow: 0 0 25px rgba(255, 105, 180, 0.5);
-            z-index: 1; /* Sits behind fireworks */
+            z-index: 1; /* Sits behind fireworks and message */
             opacity: 0;
             transition: opacity 2s ease-in-out;
             pointer-events: none;
@@ -34,24 +51,15 @@
             box-shadow: 0 0 20px #ff69b4; font-weight: bold; transition: 0.3s;
         }
         button:hover { transform: scale(1.1); background: #ff1493; }
-
-        #message {
-            position: absolute; top: 10%; width: 100%; text-align: center;
-            color: white; font-size: 3.5em; font-weight: bold;
-            text-shadow: 0 0 10px #ff69b4, 0 0 30px #ff69b4;
-            z-index: 10; visibility: hidden;
-        }
     </style>
 </head>
 <body>
 
-    <!-- Click to Start Overlay -->
     <div id="overlay">
-        <h1 style="margin-bottom: 20px;">A Gift for the Best Mom ❤️</h1>
-        <button onclick="startShow()">Open Your Surprise 🎁</button>
+        <h1 style="margin-bottom: 20px;">A Special Surprise ❤️</h1>
+        <button onclick="startShow()">Open Your Gift 🎁</button>
     </div>
 
-    <!-- Music File (Ensure your file is named music.mp3 on GitHub) -->
     <audio id="bgMusic" src="music.mp3" loop></audio>
 
     <div id="message">Happy Mother's Day!</div>
@@ -66,38 +74,40 @@
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    // List of your 6 photo names exactly as they are on GitHub
-    const photoFiles = [
-        'mom.1.jpg', 
-        'mom.2.jpg', 
-        'mom.3.jpg', 
-        'mom.4.jpg', 
-        'mom.5.jpg', 
-        'mom.6.jpg'
-    ];
+    const photoFiles = ['mom.1.jpg', 'mom.2.jpg', 'mom.3.jpg', 'mom.4.jpg', 'mom.5.jpg', 'mom.6.jpg'];
 
     function spawnPhoto() {
         const img = document.createElement('img');
-        const randomFile = photoFiles[Math.floor(Math.random() * photoFiles.length)];
-        
-        img.src = randomFile;
+        img.src = photoFiles[Math.floor(Math.random() * photoFiles.length)];
         img.className = 'mom-photo';
         
-        // Random placement
-        const x = Math.random() * (window.innerWidth - 250);
-        const y = 150 + Math.random() * (window.innerHeight - 400);
+        // Logical placement: Avoiding the center title area
+        let x, y;
+        const side = Math.random();
+        
+        if (side < 0.25) { // Left side
+            x = Math.random() * (window.innerWidth * 0.3);
+            y = Math.random() * (window.innerHeight - 250);
+        } else if (side < 0.5) { // Right side
+            x = (window.innerWidth * 0.7) + (Math.random() * (window.innerWidth * 0.2));
+            y = Math.random() * (window.innerHeight - 250);
+        } else if (side < 0.75) { // Top area
+            x = Math.random() * (window.innerWidth - 250);
+            y = Math.random() * (window.innerHeight * 0.3);
+        } else { // Bottom area
+            x = Math.random() * (window.innerWidth - 250);
+            y = (window.innerHeight * 0.7) + (Math.random() * (window.innerHeight * 0.2));
+        }
+
         img.style.left = `${x}px`;
         img.style.top = `${y}px`;
-        
-        // Random slight tilt
         img.style.transform = `rotate(${(Math.random() - 0.5) * 20}deg)`;
 
         document.body.appendChild(img);
 
-        // Fade in, stay, then fade out
-        setTimeout(() => { img.style.opacity = '1'; }, 100);    // Show
-        setTimeout(() => { img.style.opacity = '0'; }, 4000);   // Start fading out at 4 seconds
-        setTimeout(() => { img.remove(); }, 6500);              // Remove from site memory
+        setTimeout(() => { img.style.opacity = '1'; }, 100);
+        setTimeout(() => { img.style.opacity = '0'; }, 4000); 
+        setTimeout(() => { img.remove(); }, 6500);
     }
 
     function startShow() {
@@ -105,15 +115,12 @@
         msg.style.visibility = 'visible';
         bgMusic.play();
         
-        // Create a new photo every 3 seconds
-        setInterval(spawnPhoto, 3000); 
-        // Create a new firework every 0.7 seconds
+        setInterval(spawnPhoto, 2500); // New photo every 2.5 seconds
         setInterval(createFirework, 700);
-        
         animate();
     }
 
-    // --- Firework Animation Logic ---
+    // Firework Logic
     class Particle {
         constructor(x, y, color) {
             this.x = x; this.y = y; this.color = color;
@@ -135,7 +142,7 @@
     let particles = [];
     function animate() {
         requestAnimationFrame(animate);
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.15)'; // Trail effect
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         particles.forEach((p, i) => {
             if (p.alpha > 0) { p.update(); p.draw(); } 

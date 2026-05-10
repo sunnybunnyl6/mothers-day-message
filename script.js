@@ -6,7 +6,7 @@ const bgMusic = document.getElementById('bgMusic');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-// FILENAMES: Using Capital "M" to match your files exactly
+// FILENAMES: Using Capital "M" to match your files: Mom.1.jpg, etc.
 const photoFiles = [
     'Mom.1.jpg', 
     'Mom.2.jpg', 
@@ -22,19 +22,20 @@ function spawnPhoto() {
     img.src = randomFile;
     img.className = 'mom-photo';
     
-    // Random placement in the four corners/sides to avoid the middle title
+    // Logic to place photos around the centered title
     let x, y;
     const side = Math.random();
-    if (side < 0.25) { // Left
+    
+    if (side < 0.25) { // Left side
         x = Math.random() * (window.innerWidth * 0.2);
         y = Math.random() * (window.innerHeight - 300);
-    } else if (side < 0.5) { // Right
+    } else if (side < 0.5) { // Right side
         x = (window.innerWidth * 0.75) + (Math.random() * (window.innerWidth * 0.15));
         y = Math.random() * (window.innerHeight - 300);
-    } else if (side < 0.75) { // Top
+    } else if (side < 0.75) { // Top area
         x = Math.random() * (window.innerWidth - 300);
         y = Math.random() * (window.innerHeight * 0.2);
-    } else { // Bottom
+    } else { // Bottom area
         x = Math.random() * (window.innerWidth - 300);
         y = (window.innerHeight * 0.75) + (Math.random() * (window.innerHeight * 0.15));
     }
@@ -45,7 +46,6 @@ function spawnPhoto() {
 
     document.body.appendChild(img);
 
-    // Fade animation sequence
     setTimeout(() => { img.style.opacity = '1'; }, 100);
     setTimeout(() => { img.style.opacity = '0'; }, 4500); 
     setTimeout(() => { img.remove(); }, 7000);
@@ -55,11 +55,13 @@ function startShow() {
     document.getElementById('overlay').style.display = 'none';
     msg.style.visibility = 'visible';
     
-    // Play Music
-    bgMusic.play().catch(e => console.error("Music error. Check if 'Music.mp3' is on GitHub.", e));
-    
-    setInterval(spawnPhoto, 3000); // New photo every 3 seconds
-    setInterval(createFirework, 700); // New firework every 0.7 seconds
+    // Attempt to play Music.mp3
+    bgMusic.play().catch(error => {
+        console.error("Music failed to play. Check if 'Music.mp3' is on GitHub.", error);
+    });
+
+    setInterval(spawnPhoto, 3000); 
+    setInterval(createFirework, 700);
     animate();
 }
 

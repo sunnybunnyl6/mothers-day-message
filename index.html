@@ -6,7 +6,15 @@
     <title>Happy Mother's Day!</title>
     <style>
         body { margin: 0; background: #000; overflow: hidden; font-family: 'Arial', sans-serif; }
-        canvas { display: block; position: absolute; top: 0; left: 0; z-index: 5; pointer-events: none; }
+        
+        canvas { 
+            display: block; 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            z-index: 5; 
+            pointer-events: none; 
+        }
         
         #message {
             position: absolute;
@@ -26,13 +34,14 @@
 
         .mom-photo {
             position: absolute;
-            width: 250px;
+            width: 280px; 
             height: auto;
-            border: 6px solid white;
-            box-shadow: 0 0 25px rgba(255, 105, 180, 0.5);
+            border: 8px solid white;
+            box-shadow: 0 0 30px rgba(255, 105, 180, 0.8);
             z-index: 1; 
             opacity: 0;
-            transition: opacity 2s ease-in-out;
+            /* This controls how slowly they appear */
+            transition: opacity 3s ease-in-out; 
             pointer-events: none;
             border-radius: 4px;
         }
@@ -54,16 +63,18 @@
 <body>
 
     <div id="overlay">
-        <h1 style="margin-bottom: 20px;">A Special Surprise ❤️</h1>
-        <button onclick="startShow()">Open Your Gift 🎁</button>
+        <h1 style="margin-bottom: 20px;">A Gift for the Best Mom ❤️</h1>
+        <button onclick="startShow()">Open Your Surprise 🎁</button>
     </div>
 
-    <!-- Corrected to match your Music.mp3 exactly -->
+    <!-- Music file -->
     <audio id="bgMusic" src="Music.mp3" loop></audio>
 
     <div id="message">Happy Mother's Day!</div>
     <canvas id="fireworksCanvas"></canvas>
 
+    <!-- This links to your script.js -->
     <script src="script.js"></script>
 </body>
 </html>
+

@@ -6,7 +6,7 @@ const bgMusic = document.getElementById('bgMusic');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-// 1. List your 6 filenames (must match exactly on GitHub)
+// FILENAMES: Using Capital "M" to match your files: Mom.1.jpg, etc.
 const photoFiles = [
     'Mom.1.jpg', 
     'Mom.2.jpg', 
@@ -18,7 +18,8 @@ const photoFiles = [
 
 function spawnPhoto() {
     const img = document.createElement('img');
-    img.src = photoFiles[Math.floor(Math.random() * photoFiles.length)];
+    const randomFile = photoFiles[Math.floor(Math.random() * photoFiles.length)];
+    img.src = randomFile;
     img.className = 'mom-photo';
     
     // Logic to place photos around the centered title
@@ -26,17 +27,17 @@ function spawnPhoto() {
     const side = Math.random();
     
     if (side < 0.25) { // Left side
-        x = Math.random() * (window.innerWidth * 0.25);
+        x = Math.random() * (window.innerWidth * 0.2);
         y = Math.random() * (window.innerHeight - 250);
     } else if (side < 0.5) { // Right side
-        x = (window.innerWidth * 0.7) + (Math.random() * (window.innerWidth * 0.2));
+        x = (window.innerWidth * 0.75) + (Math.random() * (window.innerWidth * 0.15));
         y = Math.random() * (window.innerHeight - 250);
     } else if (side < 0.75) { // Top area
         x = Math.random() * (window.innerWidth - 250);
-        y = Math.random() * (window.innerHeight * 0.25);
+        y = Math.random() * (window.innerHeight * 0.2);
     } else { // Bottom area
         x = Math.random() * (window.innerWidth - 250);
-        y = (window.innerHeight * 0.7) + (Math.random() * (window.innerHeight * 0.2));
+        y = (window.innerHeight * 0.75) + (Math.random() * (window.innerHeight * 0.15));
     }
 
     img.style.left = `${x}px`;
@@ -45,7 +46,6 @@ function spawnPhoto() {
 
     document.body.appendChild(img);
 
-    // Fade animation
     setTimeout(() => { img.style.opacity = '1'; }, 100);
     setTimeout(() => { img.style.opacity = '0'; }, 4000); 
     setTimeout(() => { img.remove(); }, 6500);
@@ -56,7 +56,7 @@ function startShow() {
     msg.style.visibility = 'visible';
     bgMusic.play();
     
-    setInterval(spawnPhoto, 2500); // New photo every 2.5 seconds
+    setInterval(spawnPhoto, 3000); 
     setInterval(createFirework, 700);
     animate();
 }

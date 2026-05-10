@@ -6,40 +6,33 @@ const bgMusic = document.getElementById('bgMusic');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-// Add './' to the start of each filename
+// FILENAMES: Using exactly what I saw in your screenshot.
+// IMPORTANT: If your files are actually .JPG (capital), change these to .JPG
 const photoFiles = [
-    './Mom.1.jpg', 
-    './Mom.2.jpg', 
-    './Mom.3.jpg', 
-    './Mom.4.jpg', 
-    './Mom.5.jpg', 
-    './Mom.6.jpg'
+    'Mom.1.jpg', 
+    'Mom.2.jpg', 
+    'Mom.3.jpg', 
+    'Mom.4.jpg', 
+    'Mom.5.jpg', 
+    'Mom.6.jpg'
 ];
 
 function spawnPhoto() {
-    const img = document.createElement('img');
+    const img = new Image();
     const randomFile = photoFiles[Math.floor(Math.random() * photoFiles.length)];
     
-    // Adding './' helps GitHub find the file in the root folder
-    img.src = './' + randomFile; 
+    // This is the most compatible path for GitHub Pages
+    img.src = randomFile; 
     img.className = 'mom-photo';
     
-    // Random placement logic
-    let x, y;
-    const side = Math.random();
-    if (side < 0.25) { 
-        x = Math.random() * (window.innerWidth * 0.2);
-        y = Math.random() * (window.innerHeight - 300);
-    } else if (side < 0.5) { 
-        x = (window.innerWidth * 0.75) + (Math.random() * (window.innerWidth * 0.15));
-        y = Math.random() * (window.innerHeight - 300);
-    } else if (side < 0.75) { 
-        x = Math.random() * (window.innerWidth - 300);
-        y = Math.random() * (window.innerHeight * 0.2);
-    } else { 
-        x = Math.random() * (window.innerWidth - 300);
-        y = (window.innerHeight * 0.75) + (Math.random() * (window.innerHeight * 0.15));
-    }
+    // Debugging: This will tell us in the 'Console' if the image failed to load
+    img.onerror = function() {
+        console.error("Could not load image: " + img.src);
+    };
+
+    // Position logic
+    let x = Math.random() < 0.5 ? Math.random() * (window.innerWidth * 0.25) : (window.innerWidth * 0.75) + Math.random() * (window.innerWidth * 0.15);
+    let y = Math.random() * (window.innerHeight - 300);
 
     img.style.left = `${x}px`;
     img.style.top = `${y}px`;
@@ -48,25 +41,22 @@ function spawnPhoto() {
     document.body.appendChild(img);
 
     setTimeout(() => { img.style.opacity = '1'; }, 100);
-    setTimeout(() => { img.style.opacity = '0'; }, 4500); 
-    setTimeout(() => { img.remove(); }, 7000);
+    setTimeout(() => { img.style.opacity = '0'; }, 4000); 
+    setTimeout(() => { img.remove(); }, 6500);
 }
 
 function startShow() {
     document.getElementById('overlay').style.display = 'none';
     msg.style.visibility = 'visible';
     
-    // Attempt to play Music.mp3
-    bgMusic.play().catch(error => {
-        console.error("Music failed to play. Check if 'Music.mp3' is on GitHub.", error);
-    });
-
+    bgMusic.play().catch(e => console.error("Music error:", e));
+    
     setInterval(spawnPhoto, 3000); 
     setInterval(createFirework, 700);
     animate();
 }
 
-// --- Fireworks Engine ---
+// --- Fireworks Logic ---
 class Particle {
     constructor(x, y, color) {
         this.x = x; this.y = y; this.color = color;
@@ -100,7 +90,7 @@ function createFirework() {
     const x = Math.random() * canvas.width;
     const y = Math.random() * (canvas.height / 2);
     const color = `hsl(${Math.random() * 360}, 100%, 70%)`;
-    for (let i = 0; i < 70; i++) {
+    for (let i = 0; i < 60; i++) {
         particles.push(new Particle(x, y, color));
     }
 }
@@ -109,3 +99,4 @@ window.addEventListener('resize', () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 });
+
